@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <properties>
+        <property name="log.fileNames">/data/xxx-redo</property>
+        <property name="log.pattern">%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} [%t] %clr{%-5p} %clr{[%c{1.}.%M:%L]}{cyan} - %m%n</property>
+    </properties>
+    <Appenders>
+        <!--添加一个控制台追加器-->
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${log.pattern}"/>
+        </Console>
+        <RollingFile name="RollingFileInfo" fileName="${log.fileNames}/logs/redo/info.log"
+                     filePattern="${log.fileNames}/logs/redo/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+            <JsonLayout eventEol="true" compact="true" properties="true">
+            </JsonLayout>
+            <!--json输出 -->
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+            <ThresholdFilter level="info" onMatch="ACCEPT"
+                             onMismatch="DENY"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy  max="20"/>
+        </RollingFile>
+        <RollingFile name="RollingFileAll" fileName="${log.fileNames}/logs/redo/all.log"
+                     filePattern="${log.fileNames}/logs/redo/$${date:yyyy-MM}/all-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${log.pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy  max="20"/>
+        </RollingFile>
+        <RollingFile name="RollingFileError" fileName="${log.fileNames}/logs/redo/error.log"
+                     filePattern="${log.fileNames}/logs/redo/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${log.pattern}"/>
+
+            <ThresholdFilter level="error" onMatch="ACCEPT"
+                             onMismatch="DENY"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy  max="20"/>
+        </RollingFile>
+    </Appenders>
+
+    <loggers>
+        <logger name="com.xxx.redo.dao" level="DEBUG"></logger>
+        <logger name="com.xxx.redo.service" level="DEBUG"></logger>
+        <!--过滤掉spring和mybatis的一些无用的DEBUG信息 -->
+        <logger name="org.springframework" level="INFO"></logger>
+        <logger name="org.mybatis" level="INFO"></logger>
+        <logger name="springfox.documentation" level="WARN"/>
+        <root level="INFO">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFileAll"/>
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="RollingFileError"/>
+        </root>
+    </loggers>
+</Configuration>
