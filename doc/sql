@@ -1,0 +1,20 @@
+CREATE TABLE `sys_redo` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态,0待处理,1处理成功,2处理失败,3无需处理',
+  `biz_type` varchar(50) NOT NULL DEFAULT '' COMMENT '业务类型',
+  `biz_invoke_clazz` varchar(100) NOT NULL DEFAULT '' COMMENT '调用类',
+  `biz_invoke_method` varchar(100) NOT NULL DEFAULT '' COMMENT '调用方法',
+  `biz_invoke_method_argType` varchar(1000) NOT NULL DEFAULT '' COMMENT '调用方法声明参数类型',
+  `biz_invoke_args` varchar(5000) NOT NULL DEFAULT '' COMMENT '调用参数',
+  `fail_message` varchar(2000) NOT NULL DEFAULT '' COMMENT '失败原因',
+  `redo_handler` varchar(100) NOT NULL DEFAULT '' COMMENT '重试处理器',
+  `auto_redo_able` tinyint(1) NOT NULL DEFAULT '0' COMMENT '能否重试',
+  `auto_redo_limit` int(11) NOT NULL DEFAULT '1' COMMENT '重试次数限制',
+  `auto_redo_count` int(11) NOT NULL DEFAULT '0' COMMENT '重试次数',
+  `create_time` datetime DEFAULT NULL COMMENT 'create_time',
+  `creator` varchar(20) NOT NULL DEFAULT '' COMMENT 'creator',
+  `update_time` datetime DEFAULT NULL COMMENT 'update_time',
+  `updator` varchar(20) DEFAULT NULL COMMENT 'updator',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='请求重做表';
+
